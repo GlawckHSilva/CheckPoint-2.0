@@ -13,11 +13,6 @@ import {
   ScrollView
 } from "react-native";
 import { styles } from "../../../src/styles/StyleAluno";
-import { auth } from "@/src/firebase/firebaseconfig";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { useFonts } from 'expo-font';
-import Icon from 'react-native-vector-icons/AntDesign';
-import { useRouter } from "expo-router";
 
 function LoginSecretaria() {
   const router = useRouter();

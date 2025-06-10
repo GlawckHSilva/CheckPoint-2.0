@@ -1,17 +1,22 @@
+import { auth } from "@/src/firebase/firebaseconfig";
+import { useFonts } from 'expo-font';
+import { useRouter } from "expo-router";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import {
-  View,
-  Text,
+  Alert,
   Image,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Text,
   TextInput,
   TouchableOpacity,
-  Alert,
-  KeyboardAvoidingView,
   TouchableWithoutFeedback,
-  Keyboard,
-  Platform,
-  ScrollView
+  View
 } from "react-native";
+import Icon from 'react-native-vector-icons/AntDesign';
 import { styles } from "../../../src/styles/StyleAluno";
 
 function LoginSecretaria() {
@@ -54,7 +59,7 @@ function LoginSecretaria() {
 
     try {
       await signInWithEmailAndPassword(auth, email, senha);
-      router.push("/(tabs)/Home");
+      router.push("/(tabs)/DeashBoard");
     } catch (error: any) {
       console.log("Erro no login:", error.message || error);
       Alert.alert("Erro", "Email ou senha incorretos.");
@@ -118,4 +123,5 @@ function LoginSecretaria() {
     </KeyboardAvoidingView>
   );
 }
+
 export default LoginSecretaria;

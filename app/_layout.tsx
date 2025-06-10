@@ -1,28 +1,14 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Slot } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { Slot } from "expo-router";
+import { View } from "react-native";
 
-function RootLayout() {
-  const colorScheme = useColorScheme();
+import '@/src/firebase/firebaseconfig';
+import React from "react";
 
-  const [loaded] = useFonts({
-    'Poppins-Regular': require('../assets/fonts/Poppins-Regular.ttf'),
-    'Poppins-Bold': require('../assets/fonts/Poppins-Bold.ttf'),
-  });
-
-  if (!loaded) {
-    return null; // Aguarda o carregamento das fontes
-  }
-
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Slot /> {/* Slot carrega a rota ativa (ex: (tabs)/Home, etc) */}
-      <StatusBar style="auto" />
-    </ThemeProvider>
-  );
+export default function Layout() {
+    return (
+        <View style={{ flex:1, backgroundColor: '#1D2F40' }}>
+            <Slot />
+        </View>
+    );
 }
-export default RootLayout;

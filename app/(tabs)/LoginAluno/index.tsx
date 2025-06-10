@@ -39,7 +39,7 @@ function LoginAluno() {
 
     try {
       await signInWithEmailAndPassword(auth, email, senha);
-      router.push("/(tabs)/Home");
+      router.push("/(tabs)/Leitor");
     } catch (error: any) {
       console.log(error);
       Alert.alert("Erro", "Email ou senha incorretos.");
@@ -92,4 +92,5 @@ function LoginAluno() {
     </View>
   );
 }
+
 export default LoginAluno;

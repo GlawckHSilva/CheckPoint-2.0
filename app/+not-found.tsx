@@ -1,9 +1,9 @@
-import { useFonts, Poppins_400Regular, Poppins_600SemiBold, Poppins_700Bold } from '@expo-google-fonts/poppins';
+import { Poppins_400Regular, Poppins_600SemiBold, Poppins_700Bold, useFonts } from '@expo-google-fonts/poppins';
 import { ActivityIndicator, View } from 'react-native';
 
 import { ReactNode } from 'react';
 
-export default function Layout({ children }: { children: ReactNode }) {
+function Layout({ children }: { children: ReactNode }) {
   const [fontsLoaded] = useFonts({
     'Poppins-Regular': Poppins_400Regular,
     'Poppins-SemiBold': Poppins_600SemiBold,
@@ -24,3 +24,5 @@ export default function Layout({ children }: { children: ReactNode }) {
     </>
   );
 }
+
+export default Layout;

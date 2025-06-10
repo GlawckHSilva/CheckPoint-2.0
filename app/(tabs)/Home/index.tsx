@@ -1,17 +1,17 @@
+import * as Font from 'expo-font';
 import { Link } from 'expo-router';
 import React from 'react';
 import {
-  View,
-  Text,
   Image,
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
   Keyboard,
+  KeyboardAvoidingView,
   Platform,
-  ScrollView
+  ScrollView,
+  Text,
+  TouchableWithoutFeedback,
+  View
 } from 'react-native';
 import { styles } from '../../../src/styles/style';
-import * as Font from 'expo-font';
 
 function Index() {
   const [fontsLoaded] = Font.useFonts({

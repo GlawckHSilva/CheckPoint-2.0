@@ -37,7 +37,7 @@ function LoginMotorista() {
     } else {
       try {
         await signInWithEmailAndPassword(auth, email, senha);
-        router.push("/(tabs)/Home");
+        router.push("/(tabs)/ListMoto");
       } catch (error: any) {
         console.error(error);
         Alert.alert("Erro", "Email ou senha incorretos.");
@@ -88,4 +88,5 @@ function LoginMotorista() {
     </View>
   );
 }
+
 export default LoginMotorista;

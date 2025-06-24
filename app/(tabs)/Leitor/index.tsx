@@ -51,16 +51,15 @@ function LeitorQR() {
         return;
       }
 
-      const alunoRef = doc(db, 'Alunos', user.uid);
-      const alunoSnap = await getDoc(alunoRef);
-
-      if (!alunoSnap.exists()) {
-        Alert.alert('Erro', 'Dados do aluno não encontrados.');
-        setScanned(false);
+      const alunoUid = user.uid;
+      const docRef = doc(db, 'Alunos', alunoUid);
+      const docSnap = await getDoc(docRef);
+      if (!docSnap.exists()) {
+        Alert.alert('Erro', 'Dados do aluno não encontrados');
         return;
       }
 
-      const alunoData = alunoSnap.data();
+      const alunoData = docSnap.data();
 
       await addDoc(collection(db, 'Motoristas', motoristaId, 'alunos'), {
         nome: alunoData.nome,

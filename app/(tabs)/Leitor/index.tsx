@@ -1,14 +1,15 @@
 import { db } from '@/src/firebase/firebaseconfig';
 import { Camera, CameraView } from 'expo-camera';
 import { getAuth } from 'firebase/auth';
-import { addDoc, collection, doc, getDoc } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
+import { deleteDoc, doc, getDoc, setDoc } from 'firebase/firestore';
+import React, { useEffect, useRef, useState } from 'react';
 import { Alert, Animated, StyleSheet, Text, View } from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from '@expo/vector-icons/Feather';
 
 function LeitorQR() {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [scanned, setScanned] = useState(false);
+  const scanLock = useRef(false);
   const [showCheck, setShowCheck] = useState(false);
   const [checkScale] = useState(new Animated.Value(0));
 
@@ -20,6 +21,8 @@ function LeitorQR() {
   }, []);
 
   const handleBarCodeScanned = ({ data }: { data: string }) => {
+    if (scanLock.current) return;
+    scanLock.current = true;
     setScanned(true);
     const motoristaId = data;
 
@@ -41,13 +44,18 @@ function LeitorQR() {
   };
 
   const registrarPresenca = async (motoristaId: string, tipo: 'entrada' | 'saida') => {
+    let registrado = false;
     try {
       const auth = getAuth();
       const user = auth.currentUser;
 
       if (!user) {
         Alert.alert('Erro', 'Usuário não autenticado.');
-        setScanned(false);
+        return;
+      }
+
+      if (!motoristaId.trim() || motoristaId.includes('/') || !(await getDoc(doc(db, 'Motoristas', motoristaId))).exists()) {
+        Alert.alert('Erro', 'QR Code de motorista inválido.');
         return;
       }
 
@@ -61,16 +69,23 @@ function LeitorQR() {
 
       const alunoData = docSnap.data();
 
-      await addDoc(collection(db, 'Motoristas', motoristaId, 'alunos'), {
-        nome: alunoData.nome,
-        faculdade: alunoData.faculdade,
-        curso: alunoData.curso,
-        telefone: alunoData.telefone,
-        uid: alunoData.uid,
-        dataHora: new Date().toISOString(),
-      });
+      const presencaRef = doc(db, 'Motoristas', motoristaId, 'alunos', alunoUid);
+      if (tipo === 'saida') {
+        await deleteDoc(presencaRef);
+      } else {
+        await setDoc(presencaRef, {
+          nome: alunoData.nome || '',
+          faculdade: alunoData.faculdade || '',
+          curso: alunoData.curso || '',
+          telefone: alunoData.telefone || '',
+          uid: alunoUid,
+          tipo,
+          dataHora: new Date().toISOString(),
+        });
+      }
 
       // Mostra o check animado
+      registrado = true;
       setShowCheck(true);
       Animated.spring(checkScale, {
         toValue: 1,
@@ -81,7 +96,11 @@ function LeitorQR() {
             toValue: 0,
             duration: 300,
             useNativeDriver: true,
-          }).start(() => setShowCheck(false));
+          }).start(() => {
+            setShowCheck(false);
+            scanLock.current = false;
+            setScanned(false);
+          });
         }, 1200);
       });
 
@@ -91,7 +110,10 @@ function LeitorQR() {
       console.error('Erro ao registrar presença:', error);
       Alert.alert('Erro', 'Não foi possível registrar a presença.');
     } finally {
-      setScanned(false);
+      if (!registrado) {
+        scanLock.current = false;
+        setScanned(false);
+      }
     }
   };
 

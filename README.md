@@ -1,4 +1,23 @@
-# Welcome to your Expo app 👋
+# CheckPoint 2.0
+
+## Gerar APK para teste
+
+```bash
+npm ci
+npx eas-cli@latest login
+npm run build:apk
+```
+
+O perfil `preview` gera um APK instalável, com o JavaScript incluído, sem precisar
+manter o Expo/Metro aberto. Ao concluir, o EAS fornece o link de download.
+Abra o link no Android e permita a instalação desse arquivo.
+
+O projeto EAS pertence à conta `glawck`. Para compilar, use uma conta com acesso
+a esse projeto. Os fluxos de login e presença dependem do Firebase configurado em
+`src/firebase/firebaseconfig.js`, de usuários existentes e das regras do Firestore.
+
+Verificações locais: `npm run typecheck`, `npm run lint` e
+`npx expo export --platform android`.
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 

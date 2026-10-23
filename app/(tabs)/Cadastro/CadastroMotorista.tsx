@@ -1,24 +1,12 @@
 import { useRouter } from 'expo-router';
-import { getApp, getApps, initializeApp } from 'firebase/app';
+import { db } from '@/src/firebase/firebaseconfig';
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
-import { doc, getFirestore, setDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 import React, { useState } from 'react';
 import { Alert, Image, Keyboard, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
-import Icon from 'react-native-vector-icons/Feather'; // Para o ícone de olho
+import Icon from '@expo/vector-icons/Feather'; // Para o ícone de olho
 import { styles } from '../../../src/styles/StyleCadastro';
 
-// Firebase config
-const firebaseConfig = {
-  apiKey: "AIzaSyBfo7g9S1vkz7RKuLT5aG4GRBRSSF6V61w",
-  authDomain: "chekpoint-glabio.firebaseapp.com",
-  projectId: "chekpoint-glabio",
-  storageBucket: "chekpoint-glabio.appspot.com",
-  messagingSenderId: "817649622341",
-  appId: "1:817649622341:web:3a63c3f4424f553957722c"
-};
-
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
-const db = getFirestore(app);
 
 export default function CadastroMotorista() {
   const [nome, setNome] = useState('');
@@ -31,7 +19,7 @@ export default function CadastroMotorista() {
   const router = useRouter();
 
   const cadastrarMotorista = async () => {
-    if (!nome || !telefone || !CPF || !senha) {
+    if (!nome || !email || !telefone || !CPF || !senha) {
       Alert.alert('Erro', 'Preencha todos os campos.');
       return;
     }
@@ -48,7 +36,6 @@ export default function CadastroMotorista() {
         email,
         telefone,
         CPF,
-        senha, // <-- adiciona aqui, se realmente precisar
         alunos: []
       });
 
@@ -59,7 +46,7 @@ export default function CadastroMotorista() {
       });
     } catch (error: any) {
       if (error.code === 'auth/email-already-in-use') {
-        Alert.alert('Erro', 'Já existe um motorista com esse telefone.');
+        Alert.alert('Erro', 'Este e-mail já está em uso.');
       } else {
         Alert.alert('Erro', 'Não foi possível cadastrar o motorista.');
       }

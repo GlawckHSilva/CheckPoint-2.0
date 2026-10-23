@@ -1,26 +1,12 @@
 // ListaAluno.tsx
 import React, { useEffect, useState } from 'react';
-import { getFirestore, collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
-import { initializeApp, getApps, getApp } from 'firebase/app';
-import Icon from 'react-native-vector-icons/AntDesign';
+import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
+import { db } from '@/src/firebase/firebaseconfig';
+import Icon from '@expo/vector-icons/AntDesign';
 import { useRouter } from 'expo-router';
 import { View, Text, FlatList, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import styles from '../../../src/styles/ListaStyle'; // Importando os estilos
 
-// Configuração do Firebase
-const firebaseConfig = {
-  apiKey: "AIzaSyBfo7g9S1vkz7RKuLT5aG4GRBRSSF6V61w",
-  authDomain: "chekpoint-glabio.firebaseapp.com",
-  projectId: "chekpoint-glabio",
-  storageBucket: "chekpoint-glabio.firebasestorage.app",
-  messagingSenderId: "817649622341",
-  appId: "1:817649622341:web:3a63c3f4424f553957722c",
-  measurementId: "G-JLSX31165C"
-};
-
-// Verificando se o Firebase já foi inicializado
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
-const db = getFirestore(app);
 
 const ListaAluno: React.FC = () => {
   const [alunos, setAlunos] = useState<any[]>([]);
@@ -61,7 +47,7 @@ const ListaAluno: React.FC = () => {
   };
 
   const filteredAlunos = alunos.filter(aluno =>
-    aluno.nome.toLowerCase().includes(search.toLowerCase())
+    (aluno.nome || '').toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -104,13 +90,11 @@ const ListaAluno: React.FC = () => {
             <View style={styles.alunoInfoText}>
               {[
                 { label: 'Nome', value: item.nome },
-                { label: 'CPF', value: item.cpf },
+                { label: 'CPF', value: item.cpf || item.CPF },
                 { label: 'Curso', value: item.curso },
                 { label: 'Email', value: item.email },
                 { label: 'Faculdade', value: item.faculdade },
-                { label: 'Telefone', value: item.telefone },
-                { label: 'Senha', value: item.senha },
-              ].map((info, index, array) => (
+                { label: 'Telefone', value: item.telefone },              ].map((info, index, array) => (
                 <View key={index} style={styles.infoItemContainer}>
                   <Text style={styles.infoItem}>{info.label}: {info.value}</Text>
                   {/* Adiciona a linha vertical apenas entre os itens, não depois do último */}

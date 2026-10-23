@@ -1,9 +1,9 @@
 import { useRouter } from 'expo-router';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { addDoc, collection, deleteDoc, doc, getDocs, getFirestore } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDocs, getFirestore, onSnapshot, setDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Modal, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import Icon from 'react-native-vector-icons/AntDesign';
+import Icon from '@expo/vector-icons/AntDesign';
 import styles from '../../../src/styles/ListaStyle';
 
 interface Aluno {
@@ -17,11 +17,10 @@ interface Aluno {
 interface ModalPesquisaAlunoProps {
   visible: boolean;
   onClose: () => void;
-  onAdicionar: () => void;
   motoristaId: string;
 }
 
-const ModalPesquisaAluno: React.FC<ModalPesquisaAlunoProps> = ({ visible, onClose, onAdicionar, motoristaId }) => {
+const ModalPesquisaAluno: React.FC<ModalPesquisaAlunoProps> = ({ visible, onClose, motoristaId }) => {
   const [alunos, setAlunos] = useState<Aluno[]>([]);
   const [pesquisa, setPesquisa] = useState('');
 
@@ -69,13 +68,13 @@ const ModalPesquisaAluno: React.FC<ModalPesquisaAlunoProps> = ({ visible, onClos
                 onPress={async () => {
                   // Adiciona o aluno à lista do motorista
                   const db = getFirestore();
-                  await addDoc(collection(db, 'Motoristas', motoristaId, 'alunos'), {
+                  await setDoc(doc(db, 'Motoristas', motoristaId, 'alunos', item.id), {
+                    uid: item.id,
                     nome: item.nome || '',
                     curso: item.curso || '',
                     faculdade: item.faculdade || '',
                     telefone: item.telefone || '',
                   });
-                  onAdicionar();
                   onClose();
                 }}
               >
@@ -97,25 +96,15 @@ const ModalPesquisaAluno: React.FC<ModalPesquisaAlunoProps> = ({ visible, onClos
   );
 };
 
-interface Aluno {
-  id: string;
-  nome: string;
-  // adicione outros campos se necessário
-}
-
 const ListaPresenca = ({ motoristaId }: { motoristaId: string }) => {
   const [alunos, setAlunos] = useState<Aluno[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    fetchAlunosPresentes();
-  }, []);
-
-  const fetchAlunosPresentes = async () => {
-      const db = getFirestore();
-      const alunosRef = collection(db, 'Motoristas', motoristaId, 'alunos');
-      const snapshot = await getDocs(alunosRef);
+    const db = getFirestore();
+    const alunosRef = collection(db, 'Motoristas', motoristaId, 'alunos');
+    return onSnapshot(alunosRef, (snapshot) => {
       const lista = snapshot.docs.map(doc => {
         const data = doc.data();
         return {
@@ -127,7 +116,8 @@ const ListaPresenca = ({ motoristaId }: { motoristaId: string }) => {
         };
       });
       setAlunos(lista);
-    };
+    }, () => Alert.alert('Erro', 'Não foi possível carregar a lista de presença.'));
+  }, [motoristaId]);
 
   const removerAluno = (id: string) => {
     Alert.alert(
@@ -152,7 +142,6 @@ const ListaPresenca = ({ motoristaId }: { motoristaId: string }) => {
       <ModalPesquisaAluno
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
-        onAdicionar={fetchAlunosPresentes}
         motoristaId={motoristaId}
       />
       <View style={styles.header}>

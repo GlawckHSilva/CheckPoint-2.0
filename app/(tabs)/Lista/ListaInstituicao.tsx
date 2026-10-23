@@ -1,26 +1,12 @@
 // ListaInstituicao.tsx
 import React, { useEffect, useState } from 'react';
-import { getFirestore, collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
-import { initializeApp, getApps, getApp } from 'firebase/app';
-import Icon from 'react-native-vector-icons/AntDesign';
+import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
+import { db } from '@/src/firebase/firebaseconfig';
+import Icon from '@expo/vector-icons/AntDesign';
 import { useRouter } from 'expo-router';
 import { View, Text, FlatList, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import styles from '../../../src/styles/ListaStyle'; // Importando os estilos
 
-// Configuração do Firebase
-const firebaseConfig = {
-  apiKey: "AIzaSyBfo7g9S1vkz7RKuLT5aG4GRBRSSF6V61w",
-  authDomain: "chekpoint-glabio.firebaseapp.com",
-  projectId: "chekpoint-glabio",
-  storageBucket: "chekpoint-glabio.firebasestorage.app",
-  messagingSenderId: "817649622341",
-  appId: "1:817649622341:web:3a63c3f4424f553957722c",
-  measurementId: "G-JLSX31165C"
-};
-
-// Verificando se o Firebase já foi inicializado
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
-const db = getFirestore(app);
 
 const ListaInstituicao: React.FC = () => {
   const [instituicoes, setInstituicoes] = useState<any[]>([]);
@@ -61,7 +47,7 @@ const ListaInstituicao: React.FC = () => {
   };
 
   const filteredInstituicoes = instituicoes.filter(instituicao =>
-    instituicao.nome.toLowerCase().includes(search.toLowerCase())
+    (instituicao.nome || '').toLowerCase().includes(search.toLowerCase())
   );
 
   return (

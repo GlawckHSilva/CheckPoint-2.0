@@ -16,7 +16,7 @@ import {
   TouchableWithoutFeedback,
   View
 } from "react-native";
-import Icon from 'react-native-vector-icons/AntDesign';
+import Icon from '@expo/vector-icons/AntDesign';
 import { styles } from "../../../src/styles/StyleAluno";
 
 function LoginSecretaria() {

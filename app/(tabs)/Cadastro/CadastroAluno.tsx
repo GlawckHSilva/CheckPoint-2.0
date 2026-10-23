@@ -17,8 +17,8 @@ import { router } from 'expo-router';
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import { collection, doc, getDocs, setDoc } from 'firebase/firestore';
 import DropDownPicker from 'react-native-dropdown-picker';
-import IconAntDesign from 'react-native-vector-icons/AntDesign';
-import Icon from 'react-native-vector-icons/Feather';
+import IconAntDesign from '@expo/vector-icons/AntDesign';
+import Icon from '@expo/vector-icons/Feather';
 import { styles } from '../../../src/styles/StyleCadastro';
 
 
@@ -78,7 +78,6 @@ function CadastroAluno() {
         uid: userCredential.user.uid,
         nome: name,
         email: email,
-        senha: senha,
         cpf: cpf.replace(/[^\d]/g, ''),
         telefone: telefone,
         curso: curso,

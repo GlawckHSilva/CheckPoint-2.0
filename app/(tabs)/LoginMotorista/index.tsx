@@ -5,7 +5,7 @@ import { useRouter } from "expo-router";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import { Alert, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
-import Icon from 'react-native-vector-icons/AntDesign';
+import Icon from '@expo/vector-icons/AntDesign';
 
 function LoginMotorista() {
   const router = useRouter();

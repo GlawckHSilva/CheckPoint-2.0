@@ -12,11 +12,17 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.glawck.checkpoint20",
       "adaptiveIcon": {
         "foregroundImage": "./assets/image/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -24,26 +30,42 @@
       "favicon": "./assets/image/favicon.png"
     },
     "plugins": [
-  [
-    "expo-camera",
-    {
-      "cameraPermission": "Allow CheckPoint to access your camera"
-    }
-  ],
-  "expo-router",
-  [
-    "expo-splash-screen",
-    {
-      "image": "./assets/image/splash-icon.png",
-      "imageWidth": 200,
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    }
-  ],
-  "expo-font"
-],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Permita que o CheckPoint use a câmera para ler QR Codes.",
+          "recordAudioAndroid": false
+        }
+      ],
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/image/splash-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff"
+        }
+      ],
+      "expo-font",
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Permita que o CheckPoint acesse suas imagens.",
+          "savePhotosPermission": "Permita que o CheckPoint salve o QR Code na galeria."
+        }
+      ],
+      "expo-asset"
+    ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "0501fa7d-66fc-4196-b0e7-abafd13f6d5b"
+      }
+    },
+    "owner": "glawck"
   }
 }

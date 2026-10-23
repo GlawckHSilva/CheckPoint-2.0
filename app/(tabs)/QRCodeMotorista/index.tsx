@@ -5,7 +5,7 @@ import { getAuth, signOut } from 'firebase/auth';
 import React, { useRef } from 'react';
 import { Alert, Button, Text, TouchableOpacity, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from '@expo/vector-icons/Feather';
 import styles from '../../../src/styles/QR';
 
 const QRCodeMotorista: React.FC = () => {
@@ -17,7 +17,7 @@ const QRCodeMotorista: React.FC = () => {
     try {
       const auth = getAuth();
       await signOut(auth);
-      router.replace('/(tabs)/DeashBoard'); // Redireciona para a tela de dashboard após logout
+      router.replace('/(tabs)/Home');
     } catch (error) {
       console.error('Erro ao sair:', error);
     }
@@ -32,7 +32,7 @@ const QRCodeMotorista: React.FC = () => {
             encoding: FileSystem.EncodingType.Base64,
           });
 
-          const { status } = await MediaLibrary.requestPermissionsAsync();
+          const { status } = await MediaLibrary.requestPermissionsAsync(false, ['photo']);
           if (status === 'granted') {
             await MediaLibrary.saveToLibraryAsync(fileUri);
             Alert.alert('Sucesso', 'QR Code salvo na galeria!');

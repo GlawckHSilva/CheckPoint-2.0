@@ -2,7 +2,7 @@ import { Link, useRouter } from 'expo-router';
 import { getAuth, signOut } from 'firebase/auth';
 import React from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from '@expo/vector-icons/Feather';
 import { styles } from "../../../src/styles/StyleDeash";
 
 function DeashBoard() {
